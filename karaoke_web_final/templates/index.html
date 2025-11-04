@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karaoke Lyrics Player</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>🎵 Real-Time Karaoke Lyrics 🎶</h1>
+    <audio id="audio" controls crossorigin="anonymous">
+      <source src="{{ url_for('static', filename='audio.mp3') }}" type="audio/mp3">
+    </audio>
+    <div id="lyrics-box"></div>
+  </div>
+
+  <script>
+  const lyrics = {{ lyrics | tojson }};
+  const audio = document.getElementById('audio');
+  const lyricsBox = document.getElementById('lyrics-box');
+  let currentIndex = 0;
+  let isTyping = false;
+
+  function typeWriterEffect(lineText) {
+    return new Promise((resolve) => {
+      const lineDiv = document.createElement('div');
+      lineDiv.className = 'lyric fade';
+      lyricsBox.appendChild(lineDiv);
+
+      let i = 0;
+      function typeChar() {
+        if (i < lineText.length) {
+          lineDiv.textContent += lineText.charAt(i);
+          i++;
+          setTimeout(typeChar, 40);
+        } else {
+          lineDiv.classList.add('glow');
+          setTimeout(() => lineDiv.classList.remove('glow'), 2200);
+          resolve();
+        }
+      }
+      typeChar();
+    });
+  }
+
+  audio.addEventListener('timeupdate', async () => {
+    if (isTyping) return;
+    if (currentIndex < lyrics.length && audio.currentTime >= lyrics[currentIndex][0]) {
+      isTyping = true;
+      const [t, txt] = lyrics[currentIndex];
+      await typeWriterEffect(txt);
+      currentIndex++;
+      isTyping = false;
+    }
+  });
+
+  function resetLyrics() {
+    lyricsBox.innerHTML = '';
+    currentIndex = 0;
+    isTyping = false;
+  }
+  audio.addEventListener('seeked', resetLyrics);
+  audio.addEventListener('ended', resetLyrics);
+  </script>
+</body>
+</html>
