@@ -1,0 +1,42 @@
+body {
+  background: radial-gradient(circle at center, #000000, #0b0014);
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+  padding: 40px;
+}
+h1 {
+  color: #ff77ff;
+  text-shadow: 0 0 20px #ff00ff;
+  margin-bottom: 25px;
+  font-size: 2rem;
+  animation: titleGlow 3s ease-in-out infinite alternate;
+}
+@keyframes titleGlow {
+  from { text-shadow: 0 0 10px #ff00ff; }
+  to { text-shadow: 0 0 30px #ff00ff, 0 0 40px #ff66ff; }
+}
+#lyrics-box {
+  margin-top: 40px;
+  font-size: 2rem;
+  min-height: 250px;
+}
+.lyric {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 1s ease, transform 1s ease;
+  margin: 12px 0;
+}
+.lyric.fade {
+  opacity: 1;
+  transform: scale(1);
+}
+.glow {
+  color: #00ffff;
+  text-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff;
+  animation: glowPulse 1.8s infinite alternate;
+}
+@keyframes glowPulse {
+  from { text-shadow: 0 0 10px #00ffff; }
+  to { text-shadow: 0 0 25px #ff00ff, 0 0 40px #00ffff; }
+}
